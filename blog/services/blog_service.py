@@ -12,11 +12,13 @@ def get_all_blogs(db: Session):
 def get_blog(id, db: Session):
     blog = db.query(Blog).filter(Blog.id == id).first()
     if not blog:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail={"detail": f"Blog with id {id} is not available!"})
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail={
+                            "detail": f"Blog with id {id} is not available!"})
     return blog
 
 
 def create_blog(request: Blogschema, db: Session):
+    print(request)
     new_blog = Blog(title=request.title, body=request.body, user_id=1)
     db.add(new_blog)
     db.commit()
@@ -25,10 +27,12 @@ def create_blog(request: Blogschema, db: Session):
 
 
 def update_blog(id, request: Blogschema, db: Session):
-    blog = db.query(Blog).filter(Blog.id == id)
-    if not blog.first():
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail={"detail": f"Blog with id {id} is not available!"})
-    blog.update(request)
+    blog = db.query(Blog).filter(Blog.id == id).first()
+    if not blog:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail={
+                            "detail": f"Blog with id {id} is not available!"})
+    blog.title = request.title
+    blog.body = request.body
     db.commit()
     return {"detail": f"Blog with id {id} is updated!"}
 
@@ -36,10 +40,8 @@ def update_blog(id, request: Blogschema, db: Session):
 def delete_blog(id, db: Session):
     blog = db.query(Blog).filter(Blog.id == id)
     if not blog.first():
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail={"detail": f"Blog with id {id} is not available!"})
-    blog.delete()
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail={
+                            "detail": f"Blog with id {id} is not available!"})
+    blog.delete(synchronize_session=False)
     db.commit()
     return {"detail": f"Blog with id {id} is deleted!"}
-
-
-

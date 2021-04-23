@@ -15,20 +15,20 @@ def all(db: Session = Depends(get_db), current_user: Userschema = Depends(get_cu
 
 
 @router.get("/{id}", status_code=200, response_model=GetBlogschema)
-def show(id: int, db: Session = Depends(get_db)):
+def show(id: int, db: Session = Depends(get_db), current_user: Userschema = Depends(get_current_user)):
     return get_blog(id, db)
-    
+
 
 @router.post("/", status_code=status.HTTP_201_CREATED)
-def create(request: Blogschema, db: Session = Depends(get_db)):
+def create(request: Blogschema, db: Session = Depends(get_db), current_user: Userschema = Depends(get_current_user)):
     return create_blog(request, db)
 
 
 @router.put("/{id}", status_code=status.HTTP_202_ACCEPTED)
-def update(id: int, request: Blogschema, db: Session = Depends(get_db)):
+def update(id: int, request: Blogschema, db: Session = Depends(get_db), current_user: Userschema = Depends(get_current_user)):
     return update_blog(id, request, db)
 
 
 @router.delete("/{id}", status_code=status.HTTP_204_NO_CONTENT)
-def delete(id: int, db: Session = Depends(get_db)):
+def delete(id: int, db: Session = Depends(get_db), current_user: Userschema = Depends(get_current_user)):
     return delete_blog(id, db)

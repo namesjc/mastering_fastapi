@@ -2,21 +2,21 @@ from typing import List, Optional
 from pydantic import BaseModel
 
 
-# class Blogbaseschema(BaseModel):
-#     title: str
-#     body: str
-
-class Blogschema(BaseModel):
+class BlogBaseschma(BaseModel):
     title: str
     body: str
 
-    # class Config():
-    #     orm_mode = True
+
+class Blogschema(BlogBaseschma):
+    class Config():
+        orm_mode = True
+
 
 class Userschema(BaseModel):
     name: str
     email: str
     password: str
+
 
 class GetUserschema(BaseModel):
     name: str
@@ -25,6 +25,7 @@ class GetUserschema(BaseModel):
 
     class Config():
         orm_mode = True
+
 
 class GetBlogschema(BaseModel):
     title: str
