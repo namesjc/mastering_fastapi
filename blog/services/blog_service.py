@@ -1,5 +1,6 @@
-from fastapi import status, HTTPException
+from fastapi import status, HTTPException, Response
 from sqlalchemy.orm import Session
+from starlette.status import HTTP_204_NO_CONTENT
 from blog.models import Blog
 from blog.schemas import Blogschema
 
@@ -27,12 +28,11 @@ def create_blog(request: Blogschema, db: Session):
 
 
 def update_blog(id, request: Blogschema, db: Session):
-    blog = db.query(Blog).filter(Blog.id == id).first()
-    if not blog:
+    blog = db.query(Blog).filter(Blog.id == id)
+    if not blog.first():
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail={
                             "detail": f"Blog with id {id} is not available!"})
-    blog.title = request.title
-    blog.body = request.body
+    blog.update(request.dict())
     db.commit()
     return {"detail": f"Blog with id {id} is updated!"}
 
@@ -44,4 +44,5 @@ def delete_blog(id, db: Session):
                             "detail": f"Blog with id {id} is not available!"})
     blog.delete(synchronize_session=False)
     db.commit()
+    return Response(status_code=HTTP_204_NO_CONTENT)
     return {"detail": f"Blog with id {id} is deleted!"}
