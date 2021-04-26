@@ -45,4 +45,4 @@ def delete_blog(id, db: Session):
     blog.delete(synchronize_session=False)
     db.commit()
     return Response(status_code=HTTP_204_NO_CONTENT)
-    return {"detail": f"Blog with id {id} is deleted!"}
+    # return {"detail": f"Blog with id {id} is deleted!"}

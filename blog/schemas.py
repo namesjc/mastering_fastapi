@@ -48,3 +48,7 @@ class Tokenschema(BaseModel):
 
 class TokenDataschema(BaseModel):
     email: Optional[str] = None
+
+
+class Passwordschema(BaseModel):
+    password: Optional[str] = None

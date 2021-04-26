@@ -8,12 +8,12 @@ from blog.services.user_service import get_all_users, get_user, create_user
 router = APIRouter(tags=["Users"], prefix="/user")
 
 
-@router.get("/", response_model=List[GetUserschema])
+@router.get("/", status_code=status.HTTP_200_OK, response_model=List[GetUserschema])
 def all(db: Session = Depends(get_db)):
     return get_all_users(db)
 
 
-@router.get("/{id}", status_code=200, response_model=GetUserschema)
+@router.get("/{id}", status_code=status.HTTP_200_OK, response_model=GetUserschema)
 def show(id: int, db: Session = Depends(get_db)):
     return get_user(id, db)
 
